@@ -76,6 +76,11 @@ canvas{display:block;width:100%;height:100%;touch-action:none;}
 .btn{font-family:'Fredoka One',cursive;background:linear-gradient(135deg,#ff8c00,#ff4500);border:none;color:#fff;font-size:clamp(16px,4.5vw,20px);padding:clamp(10px,3vw,13px) clamp(28px,8vw,46px);border-radius:50px;cursor:pointer;box-shadow:0 5px 22px rgba(255,100,0,0.42);touch-action:manipulation;display:inline-block;margin-top:8px;}
 .btn:active{transform:scale(0.96);}
 .btn2{font-family:'Fredoka One',cursive;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.16);color:rgba(255,255,255,0.6);font-size:clamp(12px,3.5vw,14px);padding:clamp(7px,2vw,9px) clamp(16px,5vw,26px);border-radius:50px;cursor:pointer;touch-action:manipulation;display:inline-block;margin-top:9px;}
+.learn-nav-row{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:nowrap;}
+.btn-learn-nav{font-family:'Fredoka One',cursive;background:rgba(255,180,0,0.1);border:1px solid rgba(255,140,0,0.4);color:rgba(255,200,100,0.8);font-size:14px;padding:9px 22px;border-radius:50px;cursor:pointer;touch-action:manipulation;margin-top:8px;white-space:nowrap;}
+.btn-learn-nav:active{transform:scale(0.96);}
+.btn-learn-next{font-family:'Fredoka One',cursive;background:linear-gradient(135deg,#ff6d00,#e65100);border:none;color:#fff;font-size:16px;padding:10px 28px;border-radius:50px;cursor:pointer;touch-action:manipulation;margin-top:8px;white-space:nowrap;}
+.btn-learn-next:active{transform:scale(0.96);}
 .credit{color:rgba(255,255,255,0.6);font-size:13px;margin-top:10px;font-family:'Fredoka One',cursive;letter-spacing:0.5px;}
 #pause-ovl{display:none;}
 #pause-ovl.on{display:flex;}
@@ -96,11 +101,96 @@ canvas{display:block;width:100%;height:100%;touch-action:none;}
 }
 
 /* Vanberto no modal */
-.modal-vb{display:flex;align-items:center;justify-content:center;gap:10px;margin:6px 0 10px;}
-.modal-vb-robot{width:clamp(44px,12vw,70px);animation:vbFloat 3s ease-in-out infinite;}
-.modal-vb-balloon{background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,215,0,0.3);border-radius:16px;padding:8px 12px;font-family:'Fredoka One',cursive;color:#FFD600;font-size:clamp(11px,3vw,14px);text-align:left;position:relative;max-width:min(240px,55vw);}
-.modal-vb-balloon::before{content:'';position:absolute;left:-10px;top:18px;border-top:8px solid transparent;border-bottom:8px solid transparent;border-right:12px solid rgba(255,215,0,0.3);}
+
 @keyframes vbFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+/* ── VanBerto's LIVRE (flutua pelo ecrã) ── */
+@keyframes vbWander{
+  0%   {transform:translate(0,0) rotate(0deg);}
+  15%  {transform:translate(-22px,-14px) rotate(-4deg);}
+  30%  {transform:translate(-40px,-6px)  rotate(3deg);}
+  45%  {transform:translate(-28px,-20px) rotate(-3deg);}
+  60%  {transform:translate(-10px,-8px)  rotate(4deg);}
+  75%  {transform:translate(-30px,-18px) rotate(-2deg);}
+  100% {transform:translate(0,0) rotate(0deg);}
+}
+@keyframes vbHaloFree{
+  0%,100%{opacity:0.5; transform:translateX(-50%) scale(0.85);}
+  50%    {opacity:1;   transform:translateX(-50%) scale(1.2);}
+}
+@keyframes vbBubbleIn{
+  0%  {opacity:0; transform:scale(0.6) translateY(6px);}
+  60% {opacity:1; transform:scale(1.08) translateY(-2px);}
+  100%{opacity:1; transform:scale(1) translateY(0);}
+}
+@keyframes vbBubbleFloat{
+  0%,100%{transform:translateY(0);}
+  50%    {transform:translateY(-4px);}
+}
+@keyframes vbAntenna{0%,100%{opacity:0.7;}50%{opacity:1;filter:drop-shadow(0 0 4px #38bdf8);}}
+@keyframes waveVBLeft{0%{transform:rotate(0deg);}25%{transform:rotate(18deg);}50%{transform:rotate(0deg);}75%{transform:rotate(18deg);}100%{transform:rotate(0deg);}}
+.vb-free{
+  position:absolute;
+  right:clamp(14px,4vw,42px);
+  bottom:clamp(14px,4vw,42px);
+  width:clamp(78px,14vw,120px);
+  z-index:50;
+  pointer-events:none;
+  animation:vbWander 9s ease-in-out infinite;
+  filter:drop-shadow(0 10px 22px rgba(56,189,248,0.55));
+}
+.vb-free svg{display:block;width:100%;height:auto;}
+.vb-free::before{
+  content:'';
+  position:absolute;
+  left:50%; bottom:-10px;
+  width:78%; height:18px;
+  background:radial-gradient(ellipse at center,rgba(56,189,248,0.6),rgba(56,189,248,0) 70%);
+  transform:translateX(-50%);
+  filter:blur(6px);
+  animation:vbHaloFree 2.4s ease-in-out infinite;
+  pointer-events:none;
+  z-index:-1;
+}
+.vb-free-bubble{
+  position:absolute;
+  bottom:calc(100% + 14px);
+  right:0;
+  background:linear-gradient(135deg,#2a0a4e,#1a0835);
+  border:3px solid #ff6b35;
+  outline:2px solid rgba(255,215,0,0.3);outline-offset:-4px;
+  border-radius:20px;
+  padding:10px 14px 9px;
+  font-family:'Fredoka One',cursive;
+  color:#fff8e0;
+  font-size:clamp(11px,2.6vw,14px);
+  text-align:center;
+  line-height:1.3;
+  white-space:normal;
+  max-width:min(260px,62vw);
+  box-shadow:4px 4px 0 rgba(5,2,15,0.8), 0 0 24px rgba(255,107,53,0.45), inset 0 1px 0 rgba(255,255,255,0.08);
+  animation:vbBubbleFloat 3s ease-in-out infinite;
+  transform-origin:80% 100%;
+}
+.vb-free-bubble.pop{animation:vbBubbleIn 0.45s cubic-bezier(.34,1.56,.64,1) 1, vbBubbleFloat 3s ease-in-out 0.45s infinite;}
+.vb-free-bubble::after{
+  content:'';
+  position:absolute;
+  bottom:-13px; right:22px;
+  width:0;height:0;
+  border-left:9px solid transparent;
+  border-right:9px solid transparent;
+  border-top:14px solid #ff6b35;
+}
+.vb-free-bubble::before{
+  content:'';
+  position:absolute;
+  bottom:-8px; right:25px;
+  width:0;height:0;
+  border-left:6px solid transparent;
+  border-right:6px solid transparent;
+  border-top:10px solid #1a0835;
+  z-index:1;
+}
 @keyframes vbBlink{0%,92%,100%{transform:scaleY(0);}95%{transform:scaleY(1);}}
 @keyframes waveVB{0%{transform:rotate(0deg);}25%{transform:rotate(-18deg);}50%{transform:rotate(0deg);}75%{transform:rotate(-18deg);}100%{transform:rotate(0deg);}}
 
@@ -158,6 +248,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none;}
         <span id="recTxt" style="font-size:8px;color:rgba(255,215,0,0.2);font-weight:700;display:none">🏆 0</span>
       </div>
     </div>
+    <span id="playerName" style="font-family:'Fredoka One',cursive;color:#FFB300;font-size:clamp(10px,2.6vw,14px);white-space:nowrap;flex-shrink:0;text-shadow:0 0 10px rgba(255,180,0,0.5);padding:0 4px;max-width:22vw;overflow:hidden;text-overflow:ellipsis;">🎈</span>
     <div style="display:flex;flex-direction:column;flex:1;gap:3px">
       <div id="timebar-wrap"><div id="timebar"></div></div>
       <div id="miniWagons" style="display:flex;gap:3px;height:8px;"></div>
@@ -184,6 +275,31 @@ canvas{display:block;width:100%;height:100%;touch-action:none;}
     <canvas id="c"></canvas>
     <div id="uflash"></div>
 
+    <!-- VanBerto's LIVRE (flutua por cima de qualquer modal aberto) -->
+    <div class="vb-free" id="vbFree" style="display:none">
+      <div class="vb-free-bubble pop" id="vbFreeMsg">Olá! Sou o VanBerto's!</div>
+      <svg viewBox="0 0 80 80">
+        <defs>
+          <linearGradient id="bgF" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e5f2ff"/><stop offset="100%" stop-color="#bfdbfe"/></linearGradient>
+          <linearGradient id="vgF" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#22d3ee"/><stop offset="100%" stop-color="#38bdf8"/></linearGradient>
+        </defs>
+        <circle cx="40" cy="40" r="34" fill="rgba(147,197,253,0.35)"/>
+        <rect x="18" y="30" width="44" height="32" rx="14" fill="url(#bgF)"/>
+        <circle cx="40" cy="46" r="7" fill="#9ca3af"/>
+        <rect x="22" y="10" width="36" height="26" rx="13" fill="url(#bgF)"/>
+        <rect x="26" y="15" width="28" height="16" rx="8" fill="url(#vgF)"/>
+        <rect x="26" y="15" width="28" height="16" rx="8" fill="#e5f2ff" opacity="0.9" style="transform-origin:40px 23px;animation:vbBlink 5s ease-in-out infinite;"/>
+        <circle cx="33" cy="23" r="2.5" fill="#0f172a"/>
+        <circle cx="47" cy="23" r="2.5" fill="#0f172a"/>
+        <line x1="40" y1="10" x2="40" y2="4" stroke="#38bdf8" stroke-width="2"/>
+        <circle cx="40" cy="3" r="2.5" fill="#38bdf8" style="animation:vbAntenna 1.4s ease-in-out infinite;"/>
+        <rect x="12" y="34" width="6" height="20" rx="3" fill="#e5e7eb" style="transform-origin:15px 44px;animation:waveVBLeft 1.8s ease-in-out infinite;"/>
+        <rect x="62" y="34" width="6" height="20" rx="3" fill="#e5e7eb" style="transform-origin:65px 44px;animation:waveVB 1.5s ease-in-out infinite;"/>
+        <rect x="22" y="58" width="12" height="8" rx="3" fill="#1f2937"/>
+        <rect x="46" y="58" width="12" height="8" rx="3" fill="#1f2937"/>
+      </svg>
+    </div>
+
 
     <!-- PAUSA -->
     <div class="ovl" id="pause-ovl">
@@ -199,34 +315,14 @@ canvas{display:block;width:100%;height:100%;touch-action:none;}
     <div class="ovl" id="learn-ovl">
       <div class="ovl-bg"></div>
       <div class="learn-card">
-        <!-- Vanberto pequeno -->
-        <div class="learn-vb">
-          <svg viewBox="0 0 80 80" id="learnVbSvg">
-            <defs>
-              <linearGradient id="bg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e5f2ff"/><stop offset="100%" stop-color="#bfdbfe"/></linearGradient>
-              <linearGradient id="vg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#22d3ee"/><stop offset="100%" stop-color="#38bdf8"/></linearGradient>
-            </defs>
-            <circle cx="40" cy="40" r="34" fill="rgba(147,197,253,0.35)"/>
-            <rect x="18" y="30" width="44" height="32" rx="14" fill="url(#bg2)"/>
-            <circle cx="40" cy="46" r="7" fill="#9ca3af"/>
-            <rect x="22" y="10" width="36" height="26" rx="13" fill="url(#bg2)"/>
-            <rect x="26" y="15" width="28" height="16" rx="8" fill="url(#vg2)"/>
-            <rect id="learnEyelid" x="26" y="15" width="28" height="16" rx="8" fill="#e5f2ff" opacity="0.9" style="transform-origin:40px 23px;animation:vbBlink 5s ease-in-out infinite;"/>
-            <circle cx="33" cy="23" r="2.5" fill="#0f172a"/>
-            <circle cx="47" cy="23" r="2.5" fill="#0f172a"/>
-            <line x1="40" y1="10" x2="40" y2="4" stroke="#38bdf8" stroke-width="2"/>
-            <circle cx="40" cy="3" r="2.5" fill="#38bdf8"/>
-            <rect x="12" y="34" width="6" height="20" rx="3" fill="#e5e7eb"/>
-            <rect x="62" y="34" width="6" height="20" rx="3" fill="#e5e7eb" style="transform-origin:65px 44px;animation:waveVB 1.5s ease-in-out infinite;"/>
-            <rect x="22" y="58" width="12" height="8" rx="3" fill="#1f2937"/>
-            <rect x="46" y="58" width="12" height="8" rx="3" fill="#1f2937"/>
-          </svg>
-        </div>
         <div id="learnCircle" class="learn-color-circle">🐾</div>
         <div id="learnName" class="learn-name">?</div>
         <div id="learnFact" class="learn-fact">Carrega para continuar!</div>
         <div class="learn-dots" id="learnDots"></div>
-        <button class="btn" id="learnNext">Próximo animal →</button>
+        <div class="learn-nav-row">
+          <button class="btn-learn-nav" id="learnPrev" aria-label="Animal anterior">← Anterior</button>
+          <button class="btn-learn-next" id="learnNext">Próximo →</button>
+        </div>
         <br><button class="btn2" id="learnSkip">Jogar já! 🎮</button>
       </div>
     </div>
@@ -238,33 +334,6 @@ canvas{display:block;width:100%;height:100%;touch-action:none;}
         <div class="modal-hero">
           <div class="modal-title">🐾 Jogo dos Animais 🚂</div>
           <div class="modal-sub">Com o VanBerto's • Aprende os animais a brincar!</div>
-
-          <!-- Vanberto no modal -->
-          <div class="modal-vb">
-            <div class="modal-vb-robot">
-              <svg viewBox="0 0 80 80">
-                <defs>
-                  <linearGradient id="bg3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e5f2ff"/><stop offset="100%" stop-color="#bfdbfe"/></linearGradient>
-                  <linearGradient id="vg3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#22d3ee"/><stop offset="100%" stop-color="#38bdf8"/></linearGradient>
-                </defs>
-                <circle cx="40" cy="40" r="34" fill="rgba(147,197,253,0.35)"/>
-                <rect x="18" y="30" width="44" height="32" rx="14" fill="url(#bg3)"/>
-                <circle cx="40" cy="46" r="7" fill="#9ca3af"/>
-                <rect x="22" y="10" width="36" height="26" rx="13" fill="url(#bg3)"/>
-                <rect x="26" y="15" width="28" height="16" rx="8" fill="url(#vg3)"/>
-                <rect x="26" y="15" width="28" height="16" rx="8" fill="#e5f2ff" opacity="0.9" style="transform-origin:40px 23px;animation:vbBlink 5s ease-in-out infinite;"/>
-                <circle cx="33" cy="23" r="2.5" fill="#0f172a"/>
-                <circle cx="47" cy="23" r="2.5" fill="#0f172a"/>
-                <line x1="40" y1="10" x2="40" y2="4" stroke="#38bdf8" stroke-width="2"/>
-                <circle cx="40" cy="3" r="2.5" fill="#38bdf8"/>
-                <rect x="12" y="34" width="6" height="20" rx="3" fill="#e5e7eb"/>
-                <rect x="62" y="34" width="6" height="20" rx="3" fill="#e5e7eb" style="transform-origin:65px 44px;animation:waveVB 1.5s ease-in-out infinite;"/>
-                <rect x="22" y="58" width="12" height="8" rx="3" fill="#1f2937"/>
-                <rect x="46" y="58" width="12" height="8" rx="3" fill="#1f2937"/>
-              </svg>
-            </div>
-            <div class="modal-vb-balloon" id="modalVbMsg">Olá! Sou o VanBerto's 🤖<br>Vamos aprender os animais juntos!</div>
-          </div>
 
           <div class="modal-balloons" id="modalBalloons"></div>
         </div>
@@ -287,9 +356,13 @@ canvas{display:block;width:100%;height:100%;touch-action:none;}
           <div id="continueRow" style="display:none;margin-bottom:8px;">
             <button class="btn-play" id="continueBtn" style="background:linear-gradient(135deg,#00b09b,#0070c9);font-size:18px;padding:12px 40px;">▶ Continuar do Nível <span id="continueLvl">1</span></button>
           </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;justify-content:center;">
+            <label style="font-family:'Fredoka One',cursive;color:#FFB300;font-size:13px;white-space:nowrap;">🎈 O teu nome:</label>
+            <input id="playerNameInput" type="text" maxlength="16" placeholder="Escreve o teu nome..." style="font-family:'Fredoka One',cursive;font-size:13px;padding:7px 12px;border-radius:20px;border:2px solid rgba(255,140,0,0.6);background:rgba(0,0,0,0.35);color:#FFD600;outline:none;width:160px;text-align:center;">
+          </div>
           <button class="btn-play" id="startBtn">🎮 Novo Jogo</button>
           <button class="btn-learn" id="learnBtn">📚 Conhecer os animais</button>
-          <p class="credit" style="margin-top:10px">Professora: Vanda Várzea</p>
+          <p class="credit" id="creditTxt" style="margin-top:10px">© Prof.ª Vanda Várzea</p>
         </div>
       </div>
     </div>
@@ -365,14 +438,14 @@ function drawVanberto(cx,cy,scale,mood){
     ctx.restore();
   }
 
-  // Braço esquerdo (estático)
-  rrFill(-18*sc,-6*sc,6*sc,20*sc,3*sc,'#e5e7eb');
+  // Braço esquerdo (estático) — sai para fora da silhueta do corpo
+  rrFill(-27*sc,-6*sc,7*sc,20*sc,3*sc,'#e5e7eb');
 
-  // Braço direito (acena quando happy/wave)
+  // Braço direito (acena quando happy/wave) — também sai para fora
   ctx.save();
   const armOff=mood==='happy'||mood==='excited'||mood==='wave'?Math.sin(bgTime*6)*18:0;
-  ctx.translate(12*sc,-6*sc+10*sc);ctx.rotate((armOff)*Math.PI/180);
-  rrFill(0,-10*sc,6*sc,20*sc,3*sc,'#e5e7eb');
+  ctx.translate(20*sc,-6*sc+10*sc);ctx.rotate((armOff)*Math.PI/180);
+  rrFill(0,-10*sc,7*sc,20*sc,3*sc,'#e5e7eb');
   ctx.restore();
 
   // Pernas
@@ -463,6 +536,23 @@ function sndUrgent(){if(!soundOn)return;osc(440,'sine',0,0.06,0.15);osc(880,'sin
 let chufInt=null;
 function startChuf(){if(!soundOn)return;stopChuf();let b=0;chufInt=setInterval(()=>{if(!soundOn||paused)return;noise(0.09,0.032,0,900+b%2*250,1.4);noise(0.05,0.014,0.05,1500,0.9);b++;},340);}
 function stopChuf(){if(chufInt){clearInterval(chufInt);chufInt=null;}}
+// ─── VOZ (Text-to-Speech) — sempre português de Portugal, nunca pt-BR ──
+let ptVoice=null;
+function pickPtVoice(){
+  if(!('speechSynthesis' in window))return null;
+  const vs=window.speechSynthesis.getVoices();
+  if(!vs||!vs.length)return null;
+  // 1) pt-PT exato · 2) qualquer pt-* que NÃO seja pt-BR (ex: pt-AO) · nunca Brasil
+  return vs.find(v=>v.lang.toLowerCase()==='pt-pt')
+    ||vs.find(v=>v.lang.toLowerCase().startsWith('pt')&&!v.lang.toLowerCase().includes('br'))
+    ||null;
+}
+if('speechSynthesis' in window){
+  ptVoice=pickPtVoice();
+  // As vozes carregam de forma assíncrona em muitos navegadores (Safari/iOS, Chrome Android
+  // na primeira visita) — sem isto, a 1ª frase dita podia sair sem voz pt-PT escolhida.
+  window.speechSynthesis.onvoiceschanged=()=>{ptVoice=pickPtVoice();};
+}
 // Sons dos animais sintetizados com Web Audio
 function playColorNote(colorName){
   if(!soundOn)return;
@@ -471,7 +561,11 @@ function playColorNote(colorName){
   const f=a.sound[0]||523;
   osc(f,'sine',0,0.18,0.12);osc(f*1.5,'sine',0.05,0.12,0.05);
 }
-function speakPT(txt,delay){if(!soundOn)return;setTimeout(()=>{try{window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(txt);u.lang='pt-PT';u.rate=0.82;u.pitch=1.2;u.volume=1;const vs=window.speechSynthesis.getVoices();const pt=vs.find(v=>v.lang==='pt-PT')||vs.find(v=>v.lang.startsWith('pt'))||vs[0];if(pt)u.voice=pt;window.speechSynthesis.speak(u);}catch(e){}},delay||0);}
+function speakPT(txt,delay){if(!soundOn)return;setTimeout(()=>{try{window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(txt);u.lang='pt-PT';u.rate=0.82;u.pitch=1.2;u.volume=1;
+    if(!ptVoice)ptVoice=pickPtVoice(); // tenta outra vez, caso as vozes tenham carregado entretanto
+    if(ptVoice)u.voice=ptVoice; // nunca usa pt-BR: mantém sempre o português de Portugal
+    u.lang='pt-PT'; // mantém sempre o locale europeu, mesmo sem voz dedicada
+    window.speechSynthesis.speak(u);}catch(e){}},delay||0);}
 
 
 
@@ -539,19 +633,26 @@ function updateWagonIndicator(){
 // CORES
 // ═══════════════════════════════════════════════════════════════
 const COLORS=[
-  {name:'CÃO',       emoji:'🐶',h:'#C8860A',dark:'#7a4800',mid:'#a86c00',glow:'rgba(200,134,10,0.6)',   sound:[440,0,0.18,0]},
-  {name:'GATO',      emoji:'🐱',h:'#9C7BB5',dark:'#4a2d6a',mid:'#7a5a9a',glow:'rgba(156,123,181,0.6)', sound:[523,0,0.18,0]},
-  {name:'PATO',      emoji:'🦆',h:'#F5B800',dark:'#8a6200',mid:'#d4a000',glow:'rgba(245,184,0,0.6)',    sound:[659,0,0.18,0]},
-  {name:'VACA',      emoji:'🐮',h:'#E0E0E0',dark:'#888888',mid:'#c0c0c0',glow:'rgba(220,220,220,0.6)',  sound:[349,0,0.18,0]},
-  {name:'PORCO',     emoji:'🐷',h:'#FF8FAB',dark:'#9a3058',mid:'#e0607a',glow:'rgba(255,143,171,0.6)',  sound:[262,0,0.18,0]},
-  {name:'SAPO',      emoji:'🐸',h:'#4CAF50',dark:'#1b5e20',mid:'#388e3c',glow:'rgba(76,175,80,0.6)',    sound:[784,0,0.18,0]},
-  {name:'PEIXE',     emoji:'🐟',h:'#29B6F6',dark:'#0277bd',mid:'#039be5',glow:'rgba(41,182,246,0.6)',   sound:[988,0,0.18,0]},
-  {name:'COELHO',    emoji:'🐰',h:'#F8BBD9',dark:'#880e4f',mid:'#e48ab0',glow:'rgba(248,187,217,0.6)',  sound:[880,0,0.18,0]},
-  {name:'PÁSSARO',   emoji:'🐦',h:'#1E88E5',dark:'#0d47a1',mid:'#1565c0',glow:'rgba(30,136,229,0.6)',   sound:[1047,0,0.18,0]},
-  {name:'LEÃO',      emoji:'🦁',h:'#E6A020',dark:'#7a4e00',mid:'#c4861a',glow:'rgba(230,160,32,0.6)',   sound:[196,0,0.18,0]},
-  {name:'ELEFANTE',  emoji:'🐘',h:'#78909C',dark:'#37474f',mid:'#546e7a',glow:'rgba(120,144,156,0.6)',  sound:[146,0,0.18,0]},
-  {name:'MACACO',    emoji:'🐵',h:'#A1672A',dark:'#4e2800',mid:'#7d4f1a',glow:'rgba(161,103,42,0.6)',   sound:[587,0,0.18,0]},
-  {name:'TARTARUGA', emoji:'🐢',h:'#2E7D32',dark:'#0a3d0e',mid:'#1b5e20',glow:'rgba(46,125,50,0.6)',    sound:[370,0,0.18,0]},
+  {name:'CÃO',     emoji:'🐶',h:'#D2691E',dark:'#3F2009',mid:'#7A3D11',glow:'rgba(210,105,30,0.6)', sound:[440,0,0.18,0]},
+  {name:'GATO',    emoji:'🐱',h:'#8E5DB5',dark:'#2B1C36',mid:'#523669',glow:'rgba(142,93,181,0.6)', sound:[523,0,0.18,0]},
+  {name:'PATO',    emoji:'🦆',h:'#FDD835',dark:'#4C4110',mid:'#937D1F',glow:'rgba(253,216,53,0.6)', sound:[659,0,0.18,0]},
+  {name:'VACA',    emoji:'🐮',h:'#ECEFF1',dark:'#474848',mid:'#898B8C',glow:'rgba(236,239,241,0.6)', sound:[349,0,0.18,0]},
+  {name:'PORCO',   emoji:'🐷',h:'#F4547C',dark:'#491925',mid:'#8E3148',glow:'rgba(244,84,124,0.6)', sound:[262,0,0.18,0]},
+  {name:'SAPO',    emoji:'🐸',h:'#43A047',dark:'#143015',mid:'#275D29',glow:'rgba(67,160,71,0.6)', sound:[784,0,0.18,0]},
+  {name:'PEIXE',   emoji:'🐟',h:'#039BE5',dark:'#012E45',mid:'#025A85',glow:'rgba(3,155,229,0.6)', sound:[988,0,0.18,0]},
+  {name:'COELHO',  emoji:'🐰',h:'#FFAB91',dark:'#4C332C',mid:'#946354',glow:'rgba(255,171,145,0.6)', sound:[880,0,0.18,0]},
+  {name:'PÁSSARO', emoji:'🐦',h:'#3949AB',dark:'#111633',mid:'#212A63',glow:'rgba(57,73,171,0.6)', sound:[1047,0,0.18,0]},
+  {name:'LEÃO',    emoji:'🦁',h:'#FB8C00',dark:'#4B2A00',mid:'#925100',glow:'rgba(251,140,0,0.6)', sound:[196,0,0.18,0]},
+  {name:'ELEFANTE',emoji:'🐘',h:'#90A4AE',dark:'#2B3134',mid:'#545F65',glow:'rgba(144,164,174,0.6)', sound:[146,0,0.18,0]},
+  {name:'MACACO',  emoji:'🐵',h:'#795548',dark:'#241A16',mid:'#46312A',glow:'rgba(121,85,72,0.6)', sound:[587,0,0.18,0]},
+  {name:'TARTARUGA',emoji:'🐢',h:'#00897B',dark:'#002925',mid:'#004F47',glow:'rgba(0,137,123,0.6)', sound:[370,0,0.18,0]},
+  {name:'POLVO',   emoji:'🐙',h:'#D81B60',dark:'#41081D',mid:'#7D1038',glow:'rgba(216,27,96,0.6)', sound:[294,0,0.18,0]},
+  {name:'GOLFINHO',emoji:'🐬',h:'#26C6DA',dark:'#0B3B41',mid:'#16737E',glow:'rgba(38,198,218,0.6)', sound:[392,0,0.18,0]},
+  {name:'TUBARÃO', emoji:'🦈',h:'#546E7A',dark:'#192125',mid:'#314047',glow:'rgba(84,110,122,0.6)', sound:[220,0,0.18,0]},
+  {name:'BALEIA',  emoji:'🐳',h:'#1A237E',dark:'#080A26',mid:'#0F1449',glow:'rgba(26,35,126,0.6)', sound:[175,0,0.18,0]},
+  {name:'GALINHA', emoji:'🐔',h:'#E53935',dark:'#451110',mid:'#85211F',glow:'rgba(229,57,53,0.6)', sound:[494,0,0.18,0]},
+  {name:'ÁGUIA',   emoji:'🦅',h:'#7B2D26',dark:'#250E0B',mid:'#471A16',glow:'rgba(123,45,38,0.6)', sound:[330,0,0.18,0]},
+  {name:'ZEBRA',   emoji:'🦓',h:'#2E2E2E',dark:'#0E0E0E',mid:'#1B1B1B',glow:'rgba(46,46,46,0.6)', sound:[466,0,0.18,0]},
 ];
 const MAX_LEVELS=20;
 const COLOR_FACTS={
@@ -564,10 +665,17 @@ const COLOR_FACTS={
   'PEIXE':    'respira debaixo de água com guelras 🫧',
   'COELHO':   'tem dentes que crescem sempre! 🥕',
   'PÁSSARO':  'os ossos são ocos para poder voar 🪶',
-  'LEÃO':     'é o rei da selva! Ruge muito forte 👑',
+  'LEÃO':     'é o rei da savana! Ruge muito forte 👑',
   'ELEFANTE': 'é o maior animal de terra do mundo 🌍',
   'MACACO':   'usa as mãos como nós! É muito esperto 🍌',
-  'TARTARUGA':'pode viver mais de 100 anos! 🎂',
+  'TARTARUGA':'há tartarugas que vivem mais de 150 anos! 🎂',
+  'POLVO':    'tem três corações e sangue azul! 💙',
+  'GOLFINHO': 'dorme com metade do cérebro acordado! 🌙',
+  'TUBARÃO':  'tem esqueleto feito de cartilagem, sem ossos! 🦴',
+  'BALEIA':   'a baleia-azul é maior que qualquer dinossauro que existiu! 🦕',
+  'GALINHA':  'consegue ver quase à sua volta toda, 300 graus! 👀',
+  'ÁGUIA':    'enxerga 8 vezes melhor do que nós! 👁️',
+  'ZEBRA':    'tem riscas únicas, como a nossa impressão digital! 🖐️',
 };
 
 const THEMES=[
@@ -597,12 +705,53 @@ function lvlCfg(l){
 // ESTADO
 // ═══════════════════════════════════════════════════════════════
 let state='idle',score=0,level=1,raf=null;
+let playerName='Jogador',teacherName='Vanda Várzea';
+function loadNames(){
+  try{
+    const pn=localStorage.getItem('ja_playerName');if(pn)playerName=pn;
+  }catch(e){}
+}
+function saveNames(){
+  try{
+    localStorage.setItem('ja_playerName',playerName);
+  }catch(e){}
+}
+function applyNames(){
+  const pi=document.getElementById('playerNameInput');if(pi&&!pi.value)pi.value=(playerName!=='Jogador'?playerName:'');
+  const ct=document.getElementById('creditTxt');if(ct)ct.textContent='© Prof.ª '+teacherName;
+  const pn=document.getElementById('playerName');if(pn)pn.textContent='🎈 '+playerName;
+}
+function readNamesFromInputs(){
+  const pi=document.getElementById('playerNameInput');
+  playerName=(pi&&pi.value.trim())||'Jogador';
+  saveNames();
+  const pn=document.getElementById('playerName');if(pn)pn.textContent='🎈 '+playerName;
+  const ct=document.getElementById('creditTxt');if(ct)ct.textContent='© Prof.ª '+teacherName;
+}
+loadNames();
+
+// VanBerto's flutuante: visível sempre que o modal inicial OU o modo aprende estiverem abertos
+function syncVbFreeVisibility(){
+  const vb=document.getElementById('vbFree');if(!vb)return;
+  const mainOv=document.getElementById('main-ovl');
+  const learnOv=document.getElementById('learn-ovl');
+  const mainOn=mainOv&&mainOv.style.display!=='none';
+  const learnOn=learnOv&&learnOv.classList.contains('on');
+  vb.style.display=(mainOn||learnOn)?'':'none';
+}
+(function(){
+  const mainOv=document.getElementById('main-ovl');
+  const learnOv=document.getElementById('learn-ovl');
+  if(mainOv)new MutationObserver(syncVbFreeVisibility).observe(mainOv,{attributes:true,attributeFilter:['style']});
+  if(learnOv)new MutationObserver(syncVbFreeVisibility).observe(learnOv,{attributes:true,attributeFilter:['class']});
+  syncVbFreeVisibility();
+})();
 let lives=3,maxLives=3;   // ← VIDAS em vez de só timer
 let streak=0,bestStreak=0;
 let errorCount=0;
 let wagonJumps={},wagonShakes={};
 let timeLeft=60,timerInt=null,cfg={},palette=[];
-let balloons=[],falling=null,particles=[];
+let balloons=[],particles=[],fallingList=[];
 let bgOff=0,spawnClock=0,wheelAngle=0,bgTime=0;
 let pxFar=0,pxMid=0,pxNear=0;
 let floatMsgs=[],urgency=0;
@@ -632,16 +781,6 @@ function locoXForWagon(idx){
   return Math.round(wagonCenterTarget+(idx+1)*(WW+WG)-WW/2);
 }
 
-function setupPlayerState(pl){
-  pl.cfg=lvlCfg(level);
-  pl.palette=shuffle(COLORS).slice(0,pl.cfg.numColors);
-  const nw=level,wc=buildWagonColors(pl.palette,nw);
-  const startX=-(nw*(WW+WG)+LW+80),tX=locoXForWagon(0);
-  pl.train.x=startX;pl.train.targetX=tX;pl.train.entering=true;pl.train.leaving=false;pl.train.leaveSpeed=0;
-  pl.train.wagons=wc.map((c,i)=>({color:c,filled:false,x:startX-(i+1)*(WW+WG),targetX:tX-(i+1)*(WW+WG),fillAnim:0}));
-  pl.balloons=[];pl.falling=null;pl.spawnClock=0;pl.wagonShakes={};pl.wagonJumps={};pl.errorCount=0;pl.hintTimer=0;
-  pl.timeLeft=pl.cfg.timeLimit;pl.lives=maxLives;
-}
 // Distância entre duas cores (evitar adjacências parecidas)
 function colorDistance(a,b){
   const hx=s=>[parseInt(s.slice(1,3),16),parseInt(s.slice(3,5),16),parseInt(s.slice(5,7),16)];
@@ -713,7 +852,7 @@ function setupLevel(){
   const startX=-LW-200;
   train.x=startX;train.targetX=tX;train.entering=true;train.leaving=false;train.leaveSpeed=0;
   train.wagons=wc.map((c,i)=>({color:c,filled:false,x:startX-(i+1)*(WW+WG),targetX:tX-(i+1)*(WW+WG),fillAnim:0}));
-  balloons=[];falling=null;particles=[];spawnClock=0;wagonShakes={};wagonJumps={};errorCount=0;hintTimer=0;
+  balloons=[];particles=[];fallingList=[];spawnClock=0;wagonShakes={};wagonJumps={};errorCount=0;hintTimer=0;
     timeLeft=cfg.timeLimit;
   
   updateHUD();
@@ -785,6 +924,8 @@ function showLearnColor(){
   document.getElementById('learnFact').textContent=(COLOR_FACTS[c.name]||'um animal incrível')+'!';
   // atualizar dots
   document.querySelectorAll('.learn-dot').forEach((d,i)=>d.classList.toggle('active',i===learnIdx));
+  // texto do botão seguinte: 'Rever' apenas no último animal
+  document.getElementById('learnNext').textContent=(learnIdx===learnColors.length-1)?'Rever ↺':'Próximo →';
   // fala o nome
   speakPT(c.name,300);
   // nota musical
@@ -793,7 +934,10 @@ function showLearnColor(){
 document.getElementById('learnNext').addEventListener('click',()=>{
   learnIdx=(learnIdx+1)%learnColors.length;
   showLearnColor();
-  if(learnIdx===0){document.getElementById('learnNext').textContent='Rever ↺';}
+});
+document.getElementById('learnPrev').addEventListener('click',()=>{
+  learnIdx=(learnIdx-1+learnColors.length)%learnColors.length;
+  showLearnColor();
 });
 document.getElementById('learnSkip').addEventListener('click',()=>{
   document.getElementById('learn-ovl').classList.remove('on');
@@ -809,6 +953,7 @@ document.getElementById('learnBtn').addEventListener('click',()=>{
 // ═══════════════════════════════════════════════════════════════
 function startGame(){
   document.getElementById('learn-ovl').classList.remove('on');
+  readNamesFromInputs();
   score=0;level=1;paused=false;urgency=0;tutorialDone=false;errorCount=0;streak=0;lives=maxLives;festaActive=false;
   
   document.getElementById('main-ovl').style.display='none';
@@ -817,7 +962,7 @@ function startGame(){
   clearInterval(timerInt);stopChuf();
   resize();setupLevel();state='announce';
   train.x=-LW-200;train.wagons.forEach((w,i)=>{w.x=-LW-200-(i+1)*(WW+WG);});
-  window.speechSynthesis.getVoices();
+  if(!ptVoice)ptVoice=pickPtVoice();
   setVbMood('wave',180);
   setTimeout(()=>{sndAnnounce();speakPT('Nível '+level,200);},200);
   setTimeout(()=>{
@@ -1064,7 +1209,7 @@ function showFinishModal(){
         box-shadow:0 6px 28px rgba(255,100,0,0.6),0 0 40px rgba(255,100,0,0.2)">
         🎮 Jogar outra vez!
       </button>
-      <p class="credit" style="margin-top:12px">Professora: Vanda Várzea</p>
+      <p class="credit" style="margin-top:12px">© Prof.ª ${teacherName}</p>
     </div>`;
   document.getElementById('startBtn').addEventListener('click',startGame);
   document.getElementById('easyBtn')?.addEventListener('click',()=>{difficulty='easy';startGame();});
@@ -1096,7 +1241,7 @@ function showGameOver(){
         <button class="btn2" id="hardBtn">🔥 Difícil</button>
       </div>
       <button class="btn-play" id="startBtn">🔄 Tentar outra vez!</button>
-      <p class="credit" style="margin-top:12px">Professora: Vanda Várzea</p>
+      <p class="credit" style="margin-top:12px">© Prof.ª ${teacherName}</p>
     </div>`;
   document.getElementById('startBtn').addEventListener('click',startGame);
   document.getElementById('easyBtn')?.addEventListener('click',()=>{difficulty='easy';startGame();});
@@ -1646,7 +1791,7 @@ function drawBg(){
   ctx.letterSpacing='1px';
   ctx.fillStyle='rgba(255,255,255,0.9)';
   ctx.shadowColor='rgba(255,200,100,0.5)';ctx.shadowBlur=S(6);
-  ctx.fillText('✦  Professora Vanda Várzea  ✦',W-S(6),H-S(3));
+  ctx.fillText(`✦  © Prof.ª ${teacherName}  ✦`,W-S(6),H-S(3));
   ctx.restore();
 }
 
@@ -1896,7 +2041,6 @@ function drawBalloon(b,alpha){
   ctx.save();ctx.globalAlpha=(alpha||1)*0.25;ctx.shadowColor=color.glow||color.h;ctx.shadowBlur=S(16);ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fillStyle=color.h;ctx.fill();ctx.restore();
   // Corpo
   const g=ctx.createRadialGradient(x-r*0.38,y-r*0.38,r*0.03,x+r*0.1,y+r*0.15,r*1.1);g.addColorStop(0,'rgba(255,255,255,0.85)');g.addColorStop(0.18,color.h);g.addColorStop(0.65,color.mid||color.h);g.addColorStop(1,color.dark);ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();ctx.strokeStyle='rgba(0,0,0,0.12)';ctx.lineWidth=S(1.5);ctx.stroke();
-  ctx.beginPath();ctx.ellipse(x-r*0.3,y-r*0.35,r*0.22,r*0.13,-0.35,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,0.70)';ctx.fill();
   // Emoji do animal — grande, centrado no balão
   ctx.save();
   ctx.font=`${r*1.05}px serif`;
@@ -2087,9 +2231,6 @@ ctx.restore();ctx.strokeStyle=GOLD2;ctx.lineWidth=S(2.5);ctx.beginPath();ctx.rou
     rrFill(cx2,cy2,cw,ch,S(6),cg);
     // Emoji do animal centrado
     ctx.save();ctx.font=`${Math.min(ch*0.65,cw*0.58)}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='rgba(0,0,0,0.3)';ctx.shadowBlur=S(3);ctx.fillText(w.color.emoji,cx2+cw/2,cy2+ch*0.46);ctx.restore();
-    // Brilho suave
-    ctx.beginPath();ctx.ellipse(cx2+cw*0.28,cy2+ch*0.22,cw*0.22,ch*0.14,Math.PI*-0.2,0,Math.PI*2);
-    ctx.fillStyle='rgba(255,255,255,0.28)';ctx.fill();
     ctx.strokeStyle=GOLD2;ctx.lineWidth=S(2.5);ctx.beginPath();ctx.roundRect(cx2,cy2,cw,ch,S(6));ctx.stroke();
   }
   if(!locked){const fnSize=fitText(w.color.name,WW*0.90,Math.min(WH*0.17,S(12)),S(6));ctx.save();ctx.fillStyle=w.filled?'#00e676':GOLD2;ctx.font=`900 ${fnSize}px Fredoka One,cursive`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='rgba(0,0,0,0.8)';ctx.shadowBlur=S(3);ctx.fillText(w.color.name,x+WW/2,NAME_Y);ctx.restore();}
@@ -2127,8 +2268,8 @@ function drawLoco(x){
   ctx.save();ctx.beginPath();rrPath(vbWinX,vbWinY,vbWinW-S(2),vbWinH-S(2),S(4));ctx.clip();
   // desenha o Vanberto centrado na janela, com bounce suave
   const vbCX=vbWinX+vbWinW*0.5-S(1);
-  const vbCY=vbWinY+vbWinH*0.55+Math.sin(bgTime*2)*S(1.5);
-  const vbScale=vbWinH*0.45;
+  const vbCY=vbWinY+vbWinH*0.42+Math.sin(bgTime*2)*S(1.5);
+  const vbScale=vbWinH*0.60;
   drawVanberto(vbCX,vbCY,vbScale,vb.mood);
   // Chapéu de maquinista 🎩 sobre o VanBerto's
   const hsc=vbScale/34;
@@ -2166,51 +2307,71 @@ function drawGoldenWheel(x,y,r){
 function rrFill(x,y,w,h,r,fill){if(w<=0||h<=0)return;r=Math.min(r,w/2,h/2);ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.arcTo(x+w,y,x+w,y+r,r);ctx.lineTo(x+w,y+h-r);ctx.arcTo(x+w,y+h,x+w-r,y+h,r);ctx.lineTo(x+r,y+h);ctx.arcTo(x,y+h,x,y+h-r,r);ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);ctx.closePath();if(fill!==undefined){ctx.fillStyle=fill;ctx.fill();}}
 
 // ═══════════════════════════════════════════════════════════════
-// FALLING
+// QUEDA (física real — vários balões podem estar a cair ao mesmo tempo;
+// zona de acerto do vagão mais larga do que era originalmente)
 // ═══════════════════════════════════════════════════════════════
-function updateFalling(){
-  if(!falling)return;
-  falling.vy+=S(0.55);falling.x+=falling.vx*0.22;falling.y+=falling.vy;falling.sway+=0.08;
-  hintTimer=0;// reset dica ao lançar
-  for(let i=0;i<train.wagons.length;i++){
-    const w=train.wagons[i];if(w.filled)continue;
-    const wx=w.x,wy=RAIL_Y-WH;
-    // Wider collision zone + generous vertical detection
-    const inWagon=falling.x>wx-S(10)&&falling.x<wx+WW+S(10)&&falling.y+falling.r>wy-S(20)&&falling.y<wy+WH+S(40);
-    if(inWagon){
-      if(falling.hourglass){timeLeft=Math.min(cfg.timeLimit*1.5,timeLeft+10);updateHUD();sndHourglass();spawnPop(falling.x,falling.y,'#00e676',22);spawnShockwave(falling.x,falling.y,'#00e676');showMsg('+10s ⌛','#00e676',falling.x,falling.y-S(28));setVbMood('happy',80);falling=null;return;}
-      if(falling.bonusType==='star'){const pts=50*level;score+=pts;updateHUD();sndCombo();spawnConfetti(falling.x,falling.y);spawnShockwave(falling.x,falling.y,'#FFD600');showMsg('+'+pts+' ⭐','#FFD600',falling.x,falling.y-S(28));setVbMood('excited',120);falling=null;return;}
-      if(falling.bonusType==='bomb'){
-        // Explodir todos os balões da cor errada
-        const nextWagon=train.wagons.find(w=>!w.filled);
-        const correctName=nextWagon?nextWagon.color.name:null;
-        const toExplode=balloons.filter(b=>!b.hourglass&&!b.bonusType&&b.color.name!==correctName);
-        toExplode.forEach(b=>{ spawnPop(b.x,b.y,'#ff4400',12); spawnShockwave(b.x,b.y,'#ff4400'); });
-        balloons=balloons.filter(b=>b.hourglass||b.bonusType||b.color.name===correctName);
-        if(soundOn){osc(180,'sawtooth',0,0.08,0.28,80);osc(280,'sawtooth',0.06,0.12,0.22,100);noise(0.25,0.18,0,320,0.5);}
-        showMsg('💣 BOOM! +'+toExplode.length+' destruídos!','#ff6600',falling.x,falling.y-S(30));
-        setVbMood('excited',120);falling=null;return;
+function launchFalling(b,dx){
+  fallingList.push({...b,vy:-S(1.5),vx:dx,sway:b.sway});
+}
+function updateFallingList(){
+  for(let fi=fallingList.length-1;fi>=0;fi--){
+    const f=fallingList[fi];
+    f.vy+=S(0.55);f.x+=f.vx*0.22;f.y+=f.vy;f.sway+=0.08;
+    hintTimer=0;
+    let resolved=false;
+    for(let i=0;i<train.wagons.length;i++){
+      const w=train.wagons[i];if(w.filled)continue;
+      const wx=w.x,wy=RAIL_Y-WH;
+      // Zona de acerto alargada (era ±10/20/40, agora ±26/34/58) — mais fácil de pousar no vagão certo
+      const inWagon=f.x>wx-S(26)&&f.x<wx+WW+S(26)&&f.y+f.r>wy-S(34)&&f.y<wy+WH+S(58);
+      if(inWagon){
+        resolved=true;
+        if(f.hourglass){timeLeft=Math.min(cfg.timeLimit*1.5,timeLeft+10);updateHUD();sndHourglass();spawnPop(f.x,f.y,'#00e676',22);spawnShockwave(f.x,f.y,'#00e676');showMsg('+10s ⌛','#00e676',f.x,f.y-S(28));setVbMood('happy',80);break;}
+        if(f.bonusType==='star'){const pts=50*level;score+=pts;updateHUD();sndCombo();spawnConfetti(f.x,f.y);spawnShockwave(f.x,f.y,'#FFD600');showMsg('+'+pts+' ⭐','#FFD600',f.x,f.y-S(28));setVbMood('excited',120);break;}
+        if(f.bonusType==='bomb'){
+          const nextWagon=train.wagons.find(w2=>!w2.filled);
+          const correctName=nextWagon?nextWagon.color.name:null;
+          const toExplode=balloons.filter(b2=>!b2.hourglass&&!b2.bonusType&&b2.color.name!==correctName);
+          toExplode.forEach(b2=>{ spawnPop(b2.x,b2.y,'#ff4400',12); spawnShockwave(b2.x,b2.y,'#ff4400'); });
+          balloons=balloons.filter(b2=>b2.hourglass||b2.bonusType||b2.color.name===correctName);
+          if(soundOn){osc(180,'sawtooth',0,0.08,0.28,80);osc(280,'sawtooth',0.06,0.12,0.22,100);noise(0.25,0.18,0,320,0.5);}
+          showMsg('💣 BOOM! +'+toExplode.length+' destruídos!','#ff6600',f.x,f.y-S(30));
+          setVbMood('excited',120);break;
+        }
+        if(!wagonUnlocked(i)){sndWrong();spawnPop(f.x,f.y,'#ff9800',8);showMsg('🔒 Enche o anterior!','#ff9800',f.x,f.y-S(30));break;}
+        if(f.color.name===w.color.name){
+          const heightBonus=f.y<H*0.35?5:f.y<H*0.55?2:0;const pts=(10+heightBonus)*level;
+          streak++;if(streak>bestStreak)bestStreak=streak;if(level===1&&!tutorialDone)tutorialDone=true;
+          let comboBonus=0,comboTxt='';
+          if(streak===3){comboBonus=pts;comboTxt=' 🔥x3';}else if(streak===5){comboBonus=pts*2;comboTxt=' ⚡x5';}else if(streak>=7){comboBonus=pts*3;comboTxt=' 💥x'+streak;}
+          const totalPts=pts+comboBonus;w.filled=true;score+=totalPts;updateHUD();sndCorrect();
+          if(comboBonus>0){sndCombo();spawnConfettiSmall(f.x,f.y,f.color.h);setVbMood('excited',120);}
+          else setVbMood('happy',80);
+          spawnPop(f.x,f.y,f.color.h,22);spawnShockwave(f.x,f.y,f.color.h);wagonJumps[i]=1.0;
+          showMsg('+'+totalPts+(heightBonus>0?' 🚀':'')+comboTxt+' ✓','#00e676',f.x,f.y-S(32));
+          speakPT(f.color.name,120);playColorNote(f.color.name);onWagonFilled(i);
+        } else {
+          errorCount++;sndWrong();spawnPop(f.x,f.y,'#ff5252',10);showMsg('❌ Animal errado!','#ff5252',f.x,f.y-S(20));streak=0;
+        }
+        break;
       }
-      if(!wagonUnlocked(i)){sndWrong();spawnPop(falling.x,falling.y,'#ff9800',8);showMsg('🔒 Enche o anterior!','#ff9800',falling.x,falling.y-S(30));falling=null;return;}
-      if(falling.color.name===w.color.name){
-        const fc=falling.color;const heightBonus=falling.y<H*0.35?5:falling.y<H*0.55?2:0;const pts=(10+heightBonus)*level;
-        streak++;if(streak>bestStreak)bestStreak=streak;if(level===1&&!tutorialDone)tutorialDone=true;
-        let comboBonus=0,comboTxt='';
-        if(streak===3){comboBonus=pts;comboTxt=' 🔥x3';}else if(streak===5){comboBonus=pts*2;comboTxt=' ⚡x5';}else if(streak>=7){comboBonus=pts*3;comboTxt=' 💥x'+streak;}
-        const totalPts=pts+comboBonus;w.filled=true;score+=totalPts;updateHUD();sndCorrect();
-        if(comboBonus>0){sndCombo();spawnConfettiSmall(falling.x,falling.y,fc.h);setVbMood('excited',120);}
-        else setVbMood('happy',80);
-        spawnPop(falling.x,falling.y,fc.h,22);spawnShockwave(falling.x,falling.y,fc.h);wagonJumps[i]=1.0;
-        showMsg('+'+(totalPts)+(heightBonus>0?' 🚀':'')+comboTxt+' ✓','#00e676',falling.x,falling.y-S(32));
-        speakPT(fc.name,120);playColorNote(fc.name);falling=null;onWagonFilled(i);
-      } else {
-        errorCount++;sndWrong();spawnPop(falling.x,falling.y,'#ff5252',10);showMsg('❌ Animal errado!','#ff5252',falling.x,falling.y-S(20));streak=0;
-        falling=null; // liberta imediatamente para novo toque
-      }
-      return;
+    }
+    if(resolved||f.y>H+S(50)){fallingList.splice(fi,1);continue;}
+    drawBalloon(f,0.88);
+  }
+}
+function launchBalloonAt(x,y){
+  hintTimer=0;
+  for(let i=balloons.length-1;i>=0;i--){
+    const b=balloons[i];
+    if(Math.hypot(b.x-x,b.y-y)<=b.r+S(30)){
+      sndPop();spawnPop(b.x,b.y,b.hourglass?'#00e676':b.color.h,10);
+      launchFalling(b,(x-b.x)*0.12);
+      balloons.splice(i,1);
+      return true;
     }
   }
-  if(falling&&falling.y>H+S(50))falling=null;
+  return false;
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -2250,111 +2411,47 @@ function loop(){
       if(bi===kbSelected){ctx.save();ctx.strokeStyle='#fff';ctx.lineWidth=S(3);ctx.setLineDash([S(4),S(3)]);ctx.beginPath();ctx.arc(b.x,b.y,b.r+S(8),0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);ctx.restore();}
       drawBalloon(b);
     });
-    if(falling){updateFalling();if(falling)drawBalloon(falling,0.88);}
-  } else {balloons.forEach(b=>drawBalloon(b));if(falling){updateFalling();if(falling)drawBalloon(falling,0.88);}}
+  } else {balloons.forEach(b=>drawBalloon(b));}
+  updateFallingList();
   updateParticles();drawParticles();
   floatMsgs=floatMsgs.filter(m=>{ctx.save();ctx.globalAlpha=m.life*m.life;ctx.fillStyle=m.col;ctx.font=`900 ${S(24)}px Fredoka One,cursive`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='rgba(0,0,0,0.6)';ctx.shadowBlur=S(6);ctx.fillText(m.txt,m.x,m.y-=(1-m.life)*S(1.2));ctx.restore();m.life-=m.decay;return m.life>0;});
 }
 
 // ═══════════════════════════════════════════════════════════════
-// INTERAÇÃO
+// INTERAÇÃO (suporta vários dedos/toques em simultâneo)
 // ═══════════════════════════════════════════════════════════════
-function getPos(e){const rect=cv.getBoundingClientRect();const sx=W/rect.width,sy=H/rect.height;if(e.touches&&e.touches.length>0)return{x:(e.touches[0].clientX-rect.left)*sx,y:(e.touches[0].clientY-rect.top)*sy};return{x:(e.clientX-rect.left)*sx,y:(e.clientY-rect.top)*sy};}
-function spawnWaveFor(pl){
-  const unfilled=pl.train.wagons.filter(w=>!w.filled);if(!unfilled.length)return;
-  const targets=difficulty==='easy'?[unfilled[0]]:unfilled;
-  const ufc=[...new Set(targets.map(w=>w.color.name))].map(n=>COLORS.find(c=>c.name===n));
-  const total=Math.floor(rnd(3,5));const arr=[];
-  ufc.forEach(c=>arr.push(makeBalloonFor(pl,c,false)));
-  if(arr.length<2)arr.push(makeBalloonFor(pl,pick(ufc),false));
-  while(arr.length<total){if(Math.random()<0.5)arr.push(makeBalloonFor(pl,pick(ufc),false));else{const wr=COLORS.filter(c=>!ufc.find(u=>u.name===c.name));arr.push(makeBalloonFor(pl,wr.length?pick(wr):pick(COLORS),false));}}
-  shuffle(arr).forEach((b,i)=>{b.x=W+b.r+i*Math.round(S(95))+rnd(0,S(20));});
-  pl.balloons.push(...arr);
-}
-function makeBalloonFor(pl,color,isHourglass){
-  const r=Math.round(S(36)+rnd(0,S(8)));
-  return{x:W+r+10,y:rnd(S(50),RAIL_Y-S(85)),r,color:color||pick(pl.palette),vx:-(pl.cfg.speed+rnd(-S(0.15),S(0.15))),sway:rnd(0,Math.PI*2),swayY:rnd(0,Math.PI*2),hourglass:!!isHourglass,sand:1.0};
-}
-function drawTrainFor(tr,shakes,jumps,isP2){
-  // Draw wagons
-  for(let i=0;i<tr.wagons.length;i++){
-    const wx=tr.wagons[i].x+WW,nx=i===0?tr.x:tr.wagons[i-1].x,cy=RAIL_Y-WH*0.38;
-    ctx.fillStyle='#888';ctx.fillRect(Math.min(wx,nx),cy-S(3),Math.abs(wx-nx),S(6));
-  }
-  for(let i=tr.wagons.length-1;i>=0;i--)drawWagonFor(tr.wagons[i],i,shakes,jumps);
-  drawLoco(tr.x);
-}
-function drawWagonFor(w,i,shakes,jumps){
-  if(shakes[i]>0)shakes[i]=Math.max(0,shakes[i]-0.08);
-  if(jumps[i]>0)jumps[i]=Math.max(0,jumps[i]-0.07);
-  const shakeOff=shakes[i]>0?Math.sin(shakes[i]*Math.PI*3)*S(1.5)*shakes[i]:0;
-  const jumpOff=jumps[i]>0?-Math.sin(jumps[i]*Math.PI)*S(8)*jumps[i]:0;
-  // Reuse main drawWagon but with this wagon's data
-  const savedWS=wagonShakes,savedWJ=wagonJumps;
-  wagonShakes=shakes;wagonJumps=jumps;
-  drawWagon(w,i);
-  wagonShakes=savedWS;wagonJumps=savedWJ;
-}
-function updateFallingFor(pl){
-  if(!pl.falling)return;
-  pl.falling.vy+=S(0.55);pl.falling.x+=pl.falling.vx*0.22;pl.falling.y+=pl.falling.vy;pl.falling.sway+=0.08;
-  pl.hintTimer=0;
-  for(let i=0;i<pl.train.wagons.length;i++){
-    const w=pl.train.wagons[i];if(w.filled)continue;
-    const wx=w.x,wy=RAIL_Y-WH;
-    if(pl.falling.x>wx+WW*0.05&&pl.falling.x<wx+WW*0.95&&pl.falling.y+pl.falling.r>wy&&pl.falling.y<wy+WH+S(25)){
-      if(pl.falling.color.name===w.color.name){
-        const fc=pl.falling.color;
-        const pts=(10+(pl.falling.y<H*0.35?5:0))*level;
-        pl.streak=(pl.streak||0)+1;if(pl.streak>bestStreak)bestStreak=pl.streak;
-        pl.score=(pl.score||0)+pts;w.filled=true;
-        sndCorrect();spawnPop(pl.falling.x,pl.falling.y,fc.h,16);spawnShockwave(pl.falling.x,pl.falling.y,fc.h);
-        pl.wagonJumps[i]=1.0;
-        showMsg('+'+pts+' ✓','#00e676',W-pl.falling.x,pl.falling.y-S(30)); // mirror X for display
-        speakPT(fc.name,120);playColorNote(fc.name);pl.falling=null;
-        const ni=pl.train.wagons.findIndex(w=>!w.filled);
-        if(ni>=0){const newX=locoXForWagon(ni);if(newX>pl.train.targetX+1){pl.train.targetX=newX;pl.train.wagons.forEach((w2,ii)=>{w2.targetX=pl.train.targetX-(ii+1)*(WW+WG);});}}
-        if(pl.train.wagons.every(w=>w.filled)){updateHUD();}
-        updateHUD();
-      } else {
-        pl.errorCount++;sndWrong();spawnPop(pl.falling.x,pl.falling.y,'#ff5252',8);
-        pl.falling.vy=-S(2);pl.falling.vx=(pl.falling.vx>0?1:-1)*S(3);setTimeout(()=>{pl.falling=null;},600);
-      }
-      return;
-    }
-  }
-  if(pl.falling&&pl.falling.y>H+S(50))pl.falling=null;
-}
+function posFromPoint(clientX,clientY){const rect=cv.getBoundingClientRect();const sx=W/rect.width,sy=H/rect.height;return{x:(clientX-rect.left)*sx,y:(clientY-rect.top)*sy};}
 function stars_calc(){const timePct=timeLeft/cfg.timeLimit;return timePct>0.6?3:timePct>0.3?2:1;}
 // ────────────────────────────────────────────────────
 
-function getPos(e){const rect=cv.getBoundingClientRect();const sx=W/rect.width,sy=H/rect.height;if(e.touches&&e.touches.length>0)return{x:(e.touches[0].clientX-rect.left)*sx,y:(e.touches[0].clientY-rect.top)*sy};return{x:(e.clientX-rect.left)*sx,y:(e.clientY-rect.top)*sy};}
-let lastTapTime=0;
-function handleTap(e){
+let ignoreClickUntil=0;
+function handleTouchStart(e){
   e.preventDefault();e.stopPropagation();
-  const now=Date.now();if(now-lastTapTime<120)return;lastTapTime=now;
   if(state!=='play'||paused)return;
-  const{x,y}=getPos(e);
-  // Allow new tap even if previous balloon is still animating briefly
-  if(falling&&falling.y<RAIL_Y-WH-S(20))return; // only block if still high up
-  if(falling)falling=null; // clear old one instantly
-  hintTimer=0;
-  for(let i=balloons.length-1;i>=0;i--){const b=balloons[i];if(Math.hypot(b.x-x,b.y-y)<=b.r+S(30)){sndPop();spawnPop(b.x,b.y,b.hourglass?'#00e676':b.color.h,10);falling={...b,vy:-S(1.5),vx:(x-b.x)*0.12,sway:b.sway};balloons.splice(i,1);return;}}
+  ignoreClickUntil=Date.now()+700; // ignora o "clique fantasma" que os navegadores disparam depois do toque
+  for(let ti=0;ti<e.changedTouches.length;ti++){
+    const t=e.changedTouches[ti];
+    const{x,y}=posFromPoint(t.clientX,t.clientY);
+    launchBalloonAt(x,y);
+  }
 }
-cv.addEventListener('touchstart',handleTap,{passive:false});
+function handleClick(e){
+  if(Date.now()<ignoreClickUntil)return;
+  if(state!=='play'||paused)return;
+  const{x,y}=posFromPoint(e.clientX,e.clientY);
+  launchBalloonAt(x,y);
+}
+cv.addEventListener('touchstart',handleTouchStart,{passive:false});
 cv.addEventListener('touchmove',function(e){e.preventDefault();},{passive:false});
 cv.addEventListener('touchend',function(e){e.preventDefault();},{passive:false});
-cv.addEventListener('click',function(e){
-  if(Date.now()-lastTapTime<300)return;
-  handleTap(e);
-});
+cv.addEventListener('click',handleClick);
 cv.style.cursor='pointer';
 let kbSelected=-1;
 document.addEventListener('keydown',e=>{
-  if(state!=='play'||paused||falling)return;
+  if(state!=='play'||paused)return;
   if(e.key==='ArrowLeft')kbSelected=Math.max(0,(kbSelected<0?balloons.length:kbSelected)-1);
   else if(e.key==='ArrowRight')kbSelected=Math.min(balloons.length-1,kbSelected+1);
-  else if(e.key===' '||e.key==='Enter'){const b=balloons[kbSelected>=0?kbSelected:0];if(b){sndPop();spawnPop(b.x,b.y,b.hourglass?'#00e676':b.color.h,10);falling={...b,vy:-S(1.5),vx:0,sway:b.sway};balloons.splice(kbSelected>=0?kbSelected:0,1);kbSelected=-1;}}
+  else if(e.key===' '||e.key==='Enter'){const idx=kbSelected>=0?kbSelected:0;const b=balloons[idx];if(b){sndPop();spawnPop(b.x,b.y,b.hourglass?'#00e676':b.color.h,10);launchFalling(b,0);balloons.splice(idx,1);kbSelected=-1;}}
   else if(e.key==='Escape')togglePause();
 });
 
@@ -2373,6 +2470,7 @@ document.getElementById('soundbtn').addEventListener('click',()=>{soundOn=!sound
   }
 })();
 document.getElementById('continueBtn')?.addEventListener('click',function(){
+  readNamesFromInputs();
   const maxLvl=loadMaxLevel();
   level=maxLvl;
   document.getElementById('main-ovl').style.display='none';
@@ -2408,9 +2506,19 @@ function renderModalBalloons(){
 }
 
 // Mensagens do Vanberto no modal (rotativas)
-const VB_MSGS=["Olá! Sou o VanBerto's 🤖<br>Vamos conhecer os animais juntos!","Toca nos balões do animal certo<br>para encher o meu comboio! 🚂","Começa pelo Modo Aprende<br>se é a primeira vez! 🐾","Com 3 vidas e muita atenção,<br>lá chegamos ao fim! 🏆"];
+const VB_MSGS=["Olá! Sou o VanBerto's!<br>Vamos conhecer os animais juntos!","Toca nos balões do animal certo<br>para encher o meu comboio! 🚂","Começa pelo Modo Aprende<br>se é a primeira vez! 🐾","Com 3 vidas e muita atenção,<br>lá chegamos ao fim! 🏆"];
 let vbMsgIdx=0;
-function rotateVbMsg(){const el=document.getElementById('modalVbMsg');if(el){vbMsgIdx=(vbMsgIdx+1)%VB_MSGS.length;el.innerHTML=VB_MSGS[vbMsgIdx];}setTimeout(rotateVbMsg,3500);}
+function rotateVbMsg(){
+  const elFree=document.getElementById('vbFreeMsg');
+  vbMsgIdx=(vbMsgIdx+1)%VB_MSGS.length;
+  if(elFree){
+    elFree.innerHTML=VB_MSGS[vbMsgIdx];
+    elFree.classList.remove('pop');
+    void elFree.offsetWidth;
+    elFree.classList.add('pop');
+  }
+  setTimeout(rotateVbMsg,3500);
+}
 setTimeout(rotateVbMsg,3500);
 
 document.getElementById('p1Btn')?.addEventListener('click',function(){
@@ -2434,6 +2542,8 @@ document.addEventListener('touchmove',function(e){e.preventDefault();},{passive:
 document.fonts.ready.then(()=>{
   const ls=document.getElementById('loadscreen');if(ls){ls.style.transition='opacity 0.5s';ls.style.opacity='0';setTimeout(()=>ls.remove(),520);}
   renderModalBalloons();
+  applyNames();
+  document.getElementById('playerNameInput')?.addEventListener('keydown',e=>{if(e.key==='Enter')startGame();});
   document.getElementById('fullscreenbtn').addEventListener('click',()=>{if(!document.fullscreenElement){document.documentElement.requestFullscreen().then(()=>{document.getElementById('fullscreenbtn').textContent='✕';}).catch(()=>{});}else{document.exitFullscreen();document.getElementById('fullscreenbtn').textContent='⛶';}});
   document.addEventListener('fullscreenchange',()=>{const btn=document.getElementById('fullscreenbtn');if(btn)btn.textContent=document.fullscreenElement?'✕':'⛶';});
 });
