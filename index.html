@@ -12,6 +12,12 @@
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <style>html,body{overscroll-behavior:none;-webkit-touch-callout:none;}canvas{touch-action:none;}</style>
+<script>
+// Se algo falhar no arranque, mostra o erro no ecrã de carregamento
+window.addEventListener('error',function(e){var ls=document.getElementById('loadscreen');if(ls){var d=ls.querySelector('.errmsg');if(!d){d=document.createElement('div');d.className='errmsg';d.style.cssText='margin-top:16px;color:#ff8a80;font:12px monospace;max-width:90%;text-align:center';ls.appendChild(d);}d.textContent='Erro: '+(e.message||'desconhecido')+' (linha '+(e.lineno||'?')+')';}});
+// roundRect em navegadores antigos
+if(window.CanvasRenderingContext2D&&!CanvasRenderingContext2D.prototype.roundRect){CanvasRenderingContext2D.prototype.roundRect=function(x,y,w,h,r){r=Array.isArray(r)?(r[0]||0):(r||0);r=Math.min(r,w/2,h/2);this.moveTo(x+r,y);this.arcTo(x+w,y,x+w,y+h,r);this.arcTo(x+w,y+h,x,y+h,r);this.arcTo(x,y+h,x,y,r);this.arcTo(x,y,x+w,y,r);this.closePath();};}
+</script>
 <title>Jogo dos Animais 🐾🚂</title>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
 <style>
@@ -811,7 +817,7 @@ const ANIMAL_DRAW={
    face:g=>{aE(g,170,70,12,12,'#f0b050');aE(g,214,70,12,12,'#f0b050');aE(g,222,124,20,15,'#f8dca0');aE(g,232,116,6,5,'#5a3020',0,0);aEye(g,204,98,8);aQ(g,212,134,224,142,236,132,AOUT,3);}}),
  'ELEFANTE':g=>aQuad(g,{body:'#9fb0bb',belly:'#9fb0bb',head:'#9fb0bb',bx:80,by:54,hr:40,legW:36,leg:'#9fb0bb',hoof:'#e6e0d0',
    back:g=>aQo(g,48,140,24,160,30,190,'#9fb0bb',7),
-   face:g=>{aQo(g,226,124,254,152,236,206,'#9fb0bb',24);aP(g,[[222,142],[246,154],[228,166]],'#fff');aE(g,172,112,32,42,'#8aa0ae');aEye(g,206,98,8);}}),
+   face:g=>{aQo(g,224,124,244,150,230,204,'#9fb0bb',22);aP(g,[[218,142],[238,152],[222,164]],'#fff');aE(g,172,112,32,42,'#8aa0ae');aEye(g,206,98,8);}}),
  'ZEBRA':g=>aQuad(g,{body:'#f4f4f4',belly:'#f4f4f4',head:'#f4f4f4',leg:'#f4f4f4',hoof:'#222',
    back:g=>{aQo(g,50,140,20,170,34,196,'#f4f4f4',7);aE(g,34,202,8,14,'#222');},
    deco:g=>{for(let x=64;x<190;x+=22)aLine(g,[[x,96],[x-12,200]],'#222',9);},
@@ -1492,7 +1498,7 @@ function updateHUD(){
   document.getElementById('recTxt').textContent='🏆 '+loadRecord();
   const themeNames={day:'☀️ Dia',desert:'🌵 Deserto',sunset:'🌅 Pôr do Sol',night:'🌙 Noite',snow:'❄️ Neve'};
   const tt=document.getElementById('themeTxt');if(tt)tt.textContent=themeNames[getTheme(level).id]||'';
-  const mw=document.getElementById('miniWagons');if(mw&&train.wagons.length>0)mw.innerHTML=train.wagons.map(w=>`<div style="flex:1;border-radius:3px;background:${w.filled?w.color.h:'rgba(255,255,255,0.12)'};border:1px solid ${w.filled?w.color.h:'rgba(255,255,255,0.2)'};transition:background 0.3s;display:flex;align-items:center;justify-content:center;font-size:7px;overflow:hidden">${w.filled?w.color.emoji||'✓':''}</div>`).join('');
+  const mw=document.getElementById('miniWagons');if(mw&&train.wagons.length>0)mw.innerHTML=train.wagons.map(w=>`<div style="flex:1;border-radius:3px;background:${w.filled?w.color.h:'rgba(255,255,255,0.12)'};border:1px solid ${w.filled?w.color.h:'rgba(255,255,255,0.2)'};transition:background 0.3s;display:flex;align-items:center;justify-content:center;font-size:7px;overflow:hidden">${w.filled?(w.color.emoji?animalImgTag(w.color):'✓'):''}</div>`).join('');
   if(train.wagons.length>0){const filled=train.wagons.filter(w=>w.filled).length;const wt=document.getElementById('wagonTxt');wt.textContent='🚃 '+filled+'/'+train.wagons.length;wt.style.color=filled===train.wagons.length?'#00e676':'rgba(255,255,255,0.4)';}
   const th=getTheme(level);const hud=document.getElementById('hud');
   if(th.id==='day')hud.style.background='linear-gradient(135deg,#1560a0,#2280c0)';
@@ -2942,9 +2948,9 @@ document.getElementById('hardBtnS')?.addEventListener('click',()=>setDiff('hard'
 document.getElementById('startBtn').addEventListener('click',startGame);
 
 document.addEventListener('touchmove',function(e){e.preventDefault();},{passive:false});
-Promise.all([document.fonts.ready,Promise.race([bgLoaded,new Promise(r=>setTimeout(r,4000))])]).then(()=>{
-  resize();computeDims();startIdleScene();
+Promise.all([Promise.race([document.fonts.ready,new Promise(r=>setTimeout(r,2500))]),Promise.race([bgLoaded,new Promise(r=>setTimeout(r,2500))])]).then(()=>{
   const ls=document.getElementById('loadscreen');if(ls){ls.style.transition='opacity 0.5s';ls.style.opacity='0';setTimeout(()=>ls.remove(),520);}
+  try{resize();computeDims();startIdleScene();}catch(err){console.error(err);}
   renderModalBalloons();
   applyNames();
   document.getElementById('playerNameInput')?.addEventListener('keydown',e=>{if(e.key==='Enter')startGame();});
