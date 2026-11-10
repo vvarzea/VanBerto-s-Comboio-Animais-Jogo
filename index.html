@@ -228,6 +228,46 @@ canvas{display:block;width:100%;height:100%;touch-action:none;}
 
 /* cenário visível por trás do menu */
 #main-ovl .ovl-bg{background:rgba(4,6,20,0.42);backdrop-filter:blur(2px);}
+/* ===== Estética "Hora do Código" nos modais: creme com pontinhos, contornos escuros, sombras de botão ===== */
+:root{--ink:#1e1b4b;--sun:#ffd23f;--coral:#ff6b6b;--mint:#2ee6a6;--sky:#4cc9f0;--grape:#7c3aed;--cream:#fff8e7;--soft:#4a4872;}
+.ovl-bg,#main-ovl .ovl-bg{background:rgba(30,27,75,.52);backdrop-filter:blur(3px);}
+.card,#main-ovl .card,.learn-card{background:#fff;border:3px solid var(--ink);border-radius:24px;box-shadow:0 6px 0 var(--ink);}
+#main-ovl .card{border-radius:26px;}
+.card h2{color:var(--ink);text-shadow:none;}
+.card p{color:var(--soft);}
+.modal-hero{background:var(--cream) radial-gradient(rgba(255,150,60,.30) 1.4px,transparent 1.6px) 0 0/22px 22px !important;border-bottom:3px solid var(--ink);}
+.modal-hero::before,.modal-hero::after{display:none;}
+.modal-title{color:var(--ink);text-shadow:none;}
+#main-card .modal-title[style*="ff6060"]{color:#dc2626 !important;}
+.modal-sub{color:var(--grape);opacity:1;}
+.modal-rules{background:#fff;}
+.modal-rule{color:#2d2a5e;}
+.modal-rule b,#main-card b[style*="color"]{color:var(--ink) !important;background:var(--sun);padding:0 5px;border-radius:6px;}
+.modal-bottom{background:var(--cream) !important;border-top:3px solid var(--ink);}
+#main-card [style*="color:rgba(255,255,255"]{color:var(--soft) !important;}
+#main-card [style*="color:#fff;font-size:15px"]{color:var(--ink) !important;text-shadow:none !important;}
+#main-card [style*="color:#FFD600;text-shadow"]{color:#e8590c !important;text-shadow:0 3px 0 rgba(30,27,75,.25) !important;}
+#main-card [style*="color:#FFD600;font-size:14px"]{color:var(--ink) !important;text-shadow:none !important;}
+#main-card [style*="color:#FFB300"]{color:#b45309 !important;}
+#main-card [style*="rgba(0,0,0,0.3)"]{background:#fff !important;border-top:3px solid var(--ink) !important;}
+#playerNameInput{background:#fff !important;color:var(--ink) !important;border:2.5px solid var(--ink) !important;box-shadow:0 3px 0 var(--ink);}
+#playerNameInput::placeholder{color:#8a89ad;}
+.credit{color:var(--soft);}
+.btn2{background:#fff;border:2.5px solid var(--ink);color:var(--ink);box-shadow:0 3px 0 var(--ink);transition:transform .08s,box-shadow .08s;}
+.btn2[style*="color"]{background:var(--sun) !important;color:var(--ink) !important;border-color:var(--ink) !important;}
+.btn2:active{transform:translateY(3px);box-shadow:none;}
+.btn-play,.btn,.btn-learn-next{background:#ff7a1a !important;color:#fff;border:3px solid var(--ink) !important;box-shadow:0 5px 0 var(--ink) !important;text-shadow:0 2px 0 rgba(30,27,75,.35);transition:transform .08s,box-shadow .08s;}
+.btn-play:active,.btn:active,.btn-learn-next:active{transform:translateY(4px) !important;box-shadow:0 1px 0 var(--ink) !important;}
+#continueBtn{background:var(--mint) !important;color:var(--ink) !important;text-shadow:none;}
+.btn-learn{background:var(--sky);color:var(--ink);border:3px solid var(--ink);box-shadow:0 4px 0 var(--ink);}
+.btn-learn:active{transform:translateY(3px);box-shadow:none;}
+.btn-learn-nav{background:#fff;color:var(--ink);border:2.5px solid var(--ink);box-shadow:0 3px 0 var(--ink);}
+.btn-learn-nav:active{transform:translateY(3px);box-shadow:none;}
+.learn-color-circle{border:3px solid var(--ink);box-shadow:0 4px 0 var(--ink);}
+.learn-name{color:var(--ink);text-shadow:none;}
+.learn-fact{color:var(--soft);}
+.learn-dot{background:rgba(30,27,75,.2);}
+.learn-dot.active{background:var(--ink);}
 </style>
 </head>
 <body>
